@@ -1,6 +1,4 @@
-﻿body {
-}
-#topPanel {
+﻿#topPanel {
     width: 100%;
     height: 100px;
     position: fixed;
@@ -40,6 +38,18 @@
     margin-left: 10%;
     background: #000000;
     color: #d9d9d9;
+}
+#leftMoveButtonsSubpanel {
+    width: 80%;
+    margin-left: 10%;
+    text-align: justify;
+    font-size: 0;
+}
+.leftSmallButton {
+    width: 25%;
+    background: #000000;
+    color: #d9d9d9;
+    display: inline-block;
 }
 #centerPanel {
     width: 60%;

@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link rel="stylesheet" href="DefaultStyleSheet.css" />
+    <script type="text/javascript" src="JavaScript.js"></script>
     <title></title>
 </head>
 <body>
@@ -14,8 +15,14 @@
                 <span id="mainText">DICOM browser beta</span>
         </div>
         <div id="leftPanel">
-            <asp:Button class="leftButton" ID="openFile" runat="server" Text="Open file..." /><br />
-            <asp:Button class="leftButton" ID="browseImages" runat="server" Text="Browse images..." />
+            <asp:Button CssClass="leftButton" ID="openFile" runat="server" Text="Open file..." OnClientClick="loadPicture('http://upload.wikimedia.org/wikipedia/commons/c/c7/Huge_Capitol.JPG'); return false;" /><br />
+            <asp:Button CssClass="leftButton" ID="browseImages" runat="server" Text="Browse images..." /><br />
+            <div id="leftMoveButtonsSubpanel">
+            <asp:Button CssClass="leftSmallButton" ID="leftMoveButton" runat="server" Text="<-" OnClientClick="moveVPLeft(); return false;"/>
+            <asp:Button CssClass="leftSmallButton" ID="upMoveButton" runat="server" Text="^" OnClientClick="moveVPUp(); return false;"/>
+            <asp:Button CssClass="leftSmallButton" ID="rightMoveButton" runat="server" Text="->" OnClientClick="moveVPRight(); return false;" />
+            <asp:Button CssClass="leftSmallButton" ID="downMoveButton" runat="server" Text="v" OnClientClick="moveVPDown(); return false;"/>
+            </div>
         </div>
         <div id="rightPanel">
         </div>
