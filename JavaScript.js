@@ -3,9 +3,29 @@ var upLeftY = 0;
 var totalWidth = 0;
 var totalHeight = 0;
 var zoom = 0;
-var image = document.getElementById("hiddenImage");
+var image = null;
+var fileName = "";
 
+window.onload = function() {
+    image = document.getElementById("hiddenImage");
+    $("#hiddenImage").error(function () { alert("Error!"); });
+};
 
+function showList() {
+    $.ajax({
+        url: "Default3.aspx",
+        dataType: "json",
+        success: function(data) {
+            var fileArray = data.files;
+            $("#linkList").empty();
+            for (var index = 0; index < fileArray.length; index++) {
+                $("#linkList").append("<a href=\"#\" onclick=\"fileName = \'" + fileArray[index].name + "\'; loadPicture(); return false;\">" + fileArray[index].name + "</a>");
+                $("#linkList").append("<br \>");
+            }
+            
+        }
+    });
+}
 
 function renderImage() {
     $("#mainCanvas").attr('width', $("#mainCanvas").attr('scrollWidth'));
@@ -18,26 +38,11 @@ function renderImage() {
 function loadPicture() {
     $('#hiddenImage').attr('src', "Default2.aspx?viewPortX=" + document.getElementById('mainCanvas').scrollWidth +
         "&viewPortY=" + document.getElementById('mainCanvas').scrollHeight +
-        "&zoomLevel=" + zoom);
+        "&zoomLevel=" + zoom +
+        "&fileName=" + fileName);
     $('#hiddenImage').load(function () {
         renderImage();
     });
-    /*$.ajax({
-        type: "GET",
-        url: 'Default2.aspx',
-        data:
-        {
-            viewPortX: document.getElementById('mainCanvas').width,
-            viewPortY: document.getElementById('mainCanvas').height,
-            zoomLevel: zoom
-        },
-        dataType: "image/png",
-        success: function (data) {
-            $('#hiddenImage').attr('src', "data:image/png;base64," + data);
-            image = $('#hiddenImage').attr('id');
-            renderImage(image);
-        }
-    });*/
 }
 function moveVPRight() {
     if (upLeftX + document.getElementById('mainCanvas').scrollWidth + 40 <= totalWidth) {
