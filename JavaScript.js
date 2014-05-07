@@ -10,18 +10,39 @@ var fileName = "";
 var annotations = null;
 
 window.onload = function() {
-    image = document.getElementById("hiddenImage");
+    //image = document.getElementById("hiddenImage");
     window.addEventListener('resize', function() {
         renderImage();
     });
-    document.getElementById("mainCanvas").addEventListener("click", function(e) {
+    document.getElementById("mainCanvas").addEventListener("click", function (e) {
+        renderImage();
         var x = e.layerX;
         var y = e.layerY;
         for (var i = 0; i < annotations.length; i++) {
             var aX = annotations[i].rlX;
             var aY = annotations[i].rlY;
-            if ((x - aX) * (x - aX) + (y - aY) * (y - aY) <= 15 * 15 && annotations[i].rlX && annotations[i].rlY) {
-                alert(annotations[i].note);
+            if ((x - aX) * (x - aX) + (y - aY) * (y - aY) <= 8 * 8 && annotations[i].rlX && annotations[i].rlY) {
+                var ctx = document.getElementById("mainCanvas").getContext('2d');
+                ctx.font = "14px Arial";
+                
+                var w = ctx.measureText(annotations[i].note);
+                var bX = aX;
+                var bY = aY;
+                while (bX + w.width + 20 >= $("#mainCanvas").attr('scrollWidth')) {
+                    bX -= 15;
+                }
+                while (bY + 40 >= $("#mainCanvas").attr('scrollHeight')) {
+                    bY -= 15;
+                }
+                ctx.beginPath();
+                ctx.rect(bX, bY, w.width + 20, 40);
+                ctx.fillStyle = "white";
+                ctx.strokeStyle = "black";
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.fillStyle = "black";
+                ctx.fillText(annotations[i].note, bX + 10, bY + 25);
             }
         }
     });
@@ -73,6 +94,7 @@ function showList() {
 }
 
 function renderImage() {
+    document.getElementById('mainCanvas').getContext('2d').restore();
     $("#mainCanvas").attr('width', $("#mainCanvas").attr('scrollWidth'));
     $("#mainCanvas").attr('height', $("#mainCanvas").attr('scrollHeight'));
     totalWidth = $('#hiddenImage').attr('width');
@@ -90,7 +112,7 @@ function renderImage() {
             annotations[i].rlX = rlX;
             annotations[i].rlY = rlY;
             ctx.beginPath();
-            ctx.arc(rlX, rlY, 15, 0, 2 * Math.PI, false);
+            ctx.arc(rlX, rlY, 8, 0, 2 * Math.PI, false);
             ctx.fillStyle = "red";
             ctx.fill();
         } else {
