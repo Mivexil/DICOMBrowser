@@ -25,9 +25,9 @@ public partial class Default2 : System.Web.UI.Page
         {
             throw new HttpException(400, "Bad Request");
         }
+        if (String.IsNullOrEmpty(fileName)) throw new HttpException(400, "Bad Request");
         try
         {
-            DicomTranscoder.LoadCodecs(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin"), "Dicom.Native*.dll");
             var image = new DicomImage(Context.Server.MapPath("~/DICOMs/" + fileName));
             bmp = new Bitmap(image.RenderImage());
         }
@@ -36,8 +36,8 @@ public partial class Default2 : System.Web.UI.Page
             throw new HttpException(500, "Internal Server Error");
         }
         double baseScalingFactor = ((double)portX/bmp.Width > (double)portY/bmp.Height ? (double)portX/bmp.Width : (double)portY/bmp.Height);
-        if (baseScalingFactor >= 4) baseScalingFactor = 4;
-        double interval = (4 - baseScalingFactor)/10;
+        if (baseScalingFactor >= 2) baseScalingFactor = 2;
+        double interval = (2 - baseScalingFactor)/10;
         double scalingFactor = baseScalingFactor + zoomLevel*interval;
         Bitmap bmp2 = new Bitmap((int)(scalingFactor*bmp.Width), (int)(scalingFactor*bmp.Height));
         Graphics.FromImage(bmp2).InterpolationMode = InterpolationMode.High;

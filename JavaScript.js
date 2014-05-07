@@ -7,10 +7,24 @@ var realHeight = 0;
 var zoom = 0;
 var image = null;
 var fileName = "";
+var annotations = null;
 
 window.onload = function() {
     image = document.getElementById("hiddenImage");
-    
+    window.addEventListener('resize', function() {
+        renderImage();
+    });
+    document.getElementById("mainCanvas").addEventListener("click", function(e) {
+        var x = e.layerX;
+        var y = e.layerY;
+        for (var i = 0; i < annotations.length; i++) {
+            var aX = annotations[i].rlX;
+            var aY = annotations[i].rlY;
+            if ((x - aX) * (x - aX) + (y - aY) * (y - aY) <= 15 * 15 && annotations[i].rlX && annotations[i].rlY) {
+                alert(annotations[i].note);
+            }
+        }
+    });
     $("#brightnessrange").bind('change', function (e) {
         var brightness = parseInt($(this).val());
         setBrightness(brightness);
@@ -65,6 +79,26 @@ function renderImage() {
     totalHeight = $('#hiddenImage').attr('height');
     var ctx = document.getElementById('mainCanvas').getContext('2d');
     ctx.drawImage(document.getElementById("hiddenImage"), upLeftX, upLeftY, $("#mainCanvas").attr('scrollWidth'), $("#mainCanvas").attr('scrollHeight'), 0, 0, $("#mainCanvas").attr('scrollWidth'), $("#mainCanvas").attr('scrollHeight'));
+    //add note drawing here
+    if (annotations == null) return;
+    for (var i = 0; i < annotations.length; i++) {
+        var x = (totalWidth * annotations[i].x) / realWidth;
+        var y = (totalHeight * annotations[i].y) / realHeight;
+        if (x >= upLeftX && y >= upLeftY && x < upLeftX + $("#mainCanvas").attr('scrollWidth') && y < upLeftY + $("#mainCanvas").attr('scrollHeight')) {
+            var rlX = x - upLeftX;
+            var rlY = y - upLeftY;
+            annotations[i].rlX = rlX;
+            annotations[i].rlY = rlY;
+            ctx.beginPath();
+            ctx.arc(rlX, rlY, 15, 0, 2 * Math.PI, false);
+            ctx.fillStyle = "red";
+            ctx.fill();
+        } else {
+            annotations[i].rlX = null;
+            annotations[i].rlY = null;
+        }
+    }
+    
 }
 function loadPicture() {
     $('#hiddenImage').remove();
@@ -74,10 +108,18 @@ function loadPicture() {
         $.ajax({
             url: "Default4.aspx?fileName=" + fileName,
             dataType: "json",
-            async: false,
+            //async: false,
             success: function (data) {
                 realWidth = data.x;
                 realHeight = data.y;
+                $.ajax({
+                    url: "Default5.aspx?fileName=" + fileName,
+                    dataType: "json",
+                    success: function(d) {
+                        annotations = d.annotations;
+                        renderImage();
+                    }
+                })
             }
         });
         setBrightness(parseInt($("#brightnessrange").val()));
@@ -139,11 +181,15 @@ function moveVPUp() {
     }
 }
 function zoomIn() {
-    if (zoom < 10) zoom++;
-    loadPicture();
+    if (zoom < 10) {
+        zoom++;
+        loadPicture();
+    }
 }
 
 function zoomOut() {
-    if (zoom > 0) zoom--;
-    loadPicture();
+    if (zoom > 0) {
+        zoom--;
+        loadPicture();
+    }
 }

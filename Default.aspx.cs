@@ -9,8 +9,6 @@ using System.Web.UI.WebControls;
 
 public partial class _Default : System.Web.UI.Page
 {
-    Bitmap hugePicture;
-    List<Bitmap> smallerPictures = new List<Bitmap>(); 
     protected void Page_Load(object sender, EventArgs e)
     {
 
