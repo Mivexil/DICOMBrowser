@@ -2,14 +2,45 @@
 var upLeftY = 0;
 var totalWidth = 0;
 var totalHeight = 0;
+var realWidth = 0;
+var realHeight = 0;
 var zoom = 0;
 var image = null;
 var fileName = "";
 
 window.onload = function() {
     image = document.getElementById("hiddenImage");
-    $("#hiddenImage").error(function () { alert("Error!"); });
+    
+    $("#brightnessrange").bind('change', function (e) {
+        var brightness = parseInt($(this).val());
+        setBrightness(brightness);
+    });
+    $("#contrastrange").bind('change', function (e) {
+        var contrast = parseInt($(this).val());
+        setContrast(contrast);
+    });
+    showList();
 };
+
+function setBrightness(b) {
+    Caman("#hiddenImage", function () {
+        this.revert();
+        this.brightness(b - 50);
+        this.render(function () {
+            renderImage();
+        });
+    });
+}
+
+function setContrast(c) {
+    Caman("#hiddenImage", function () {
+        this.revert();
+        this.contrast(c - 50);
+        this.render(function () {
+            renderImage();
+        });
+    });
+}
 
 function showList() {
     $.ajax({
@@ -19,7 +50,7 @@ function showList() {
             var fileArray = data.files;
             $("#linkList").empty();
             for (var index = 0; index < fileArray.length; index++) {
-                $("#linkList").append("<a href=\"#\" onclick=\"fileName = \'" + fileArray[index].name + "\'; loadPicture(); return false;\">" + fileArray[index].name + "</a>");
+                $("#linkList").append("<a href=\"#\" onclick=\"fileName = \'" + fileArray[index].name + "\'; upLeftX = upLeftY = zoom = 0; loadPicture(); return false;\">" + fileArray[index].name + "</a>");
                 $("#linkList").append("<br \>");
             }
             
@@ -36,13 +67,36 @@ function renderImage() {
     ctx.drawImage(document.getElementById("hiddenImage"), upLeftX, upLeftY, $("#mainCanvas").attr('scrollWidth'), $("#mainCanvas").attr('scrollHeight'), 0, 0, $("#mainCanvas").attr('scrollWidth'), $("#mainCanvas").attr('scrollHeight'));
 }
 function loadPicture() {
+    $('#hiddenImage').remove();
+    $('#hiddenPictures').append("<img id='hiddenImage' />");
+    $("#hiddenImage").error(function () { alert("Error!"); });
+    $('#hiddenImage').load(function () {
+        $.ajax({
+            url: "Default4.aspx?fileName=" + fileName,
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                realWidth = data.x;
+                realHeight = data.y;
+            }
+        });
+        setBrightness(parseInt($("#brightnessrange").val()));
+        setContrast(parseInt($("#contrastrange").val()));
+        renderImage();
+    });
     $('#hiddenImage').attr('src', "Default2.aspx?viewPortX=" + document.getElementById('mainCanvas').scrollWidth +
         "&viewPortY=" + document.getElementById('mainCanvas').scrollHeight +
         "&zoomLevel=" + zoom +
         "&fileName=" + fileName);
-    $('#hiddenImage').load(function () {
-        renderImage();
-    });
+    /*Caman("#hiddenImage", "/Default2.aspx?viewPortX=" + document.getElementById('mainCanvas').scrollWidth +
+        "&viewPortY=" + document.getElementById('mainCanvas').scrollHeight +
+        "&zoomLevel=" + zoom +
+        "&fileName=" + fileName, function (e) {
+            this.brightness(0);
+            this.render(function() {
+                alert($("#hiddenImage").attr("width")); renderImage(); });
+        } );*/
+
 }
 function moveVPRight() {
     if (upLeftX + document.getElementById('mainCanvas').scrollWidth + 40 <= totalWidth) {
@@ -85,7 +139,7 @@ function moveVPUp() {
     }
 }
 function zoomIn() {
-    if (zoom < 5) zoom++;
+    if (zoom < 10) zoom++;
     loadPicture();
 }
 

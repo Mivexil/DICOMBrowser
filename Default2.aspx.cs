@@ -36,7 +36,8 @@ public partial class Default2 : System.Web.UI.Page
             throw new HttpException(500, "Internal Server Error");
         }
         double baseScalingFactor = ((double)portX/bmp.Width > (double)portY/bmp.Height ? (double)portX/bmp.Width : (double)portY/bmp.Height);
-        double interval = (1 - baseScalingFactor)/5;
+        if (baseScalingFactor >= 4) baseScalingFactor = 4;
+        double interval = (4 - baseScalingFactor)/10;
         double scalingFactor = baseScalingFactor + zoomLevel*interval;
         Bitmap bmp2 = new Bitmap((int)(scalingFactor*bmp.Width), (int)(scalingFactor*bmp.Height));
         Graphics.FromImage(bmp2).InterpolationMode = InterpolationMode.High;
