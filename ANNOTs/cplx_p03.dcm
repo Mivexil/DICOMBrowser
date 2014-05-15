@@ -1,3 +1,4 @@
 ﻿{ "x": 350, "y": 111, "note": "This is a test" }
 { "x": 250, "y": 111, "note": "This is another test" }
 { "x": 150, "y": 111, "note": "This is yet another test" }
+{ "x": 100, "y": 200, "note": "This is POST test" }

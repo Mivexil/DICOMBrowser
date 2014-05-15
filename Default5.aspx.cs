@@ -36,8 +36,11 @@ public partial class Default5 : System.Web.UI.Page
         string line;
         while ((line = sr.ReadLine()) != null)
         {
-            sb.Append(line);
-            sb.Append(",");
+            if (line != "")
+            {
+                sb.Append(line);
+                sb.Append(",");
+            }
         }
         if (sb[sb.Length - 1] == ',')
         {

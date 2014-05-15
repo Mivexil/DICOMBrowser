@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Management.Instrumentation;
 using System.Reflection;
 using System.Web;
 using Dicom.Imaging;
@@ -28,7 +29,8 @@ public partial class Default2 : System.Web.UI.Page
         if (String.IsNullOrEmpty(fileName)) throw new HttpException(400, "Bad Request");
         try
         {
-            var image = new DicomImage(Context.Server.MapPath("~/DICOMs/" + fileName));
+            var s = Context.Server.MapPath("~/DICOMs/" + fileName);
+            var image = new DicomImage(s);
             bmp = new Bitmap(image.RenderImage());
         }
         catch (Exception)
