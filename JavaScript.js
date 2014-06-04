@@ -85,58 +85,15 @@ window.onload = function() {
         blue = parseInt($(this).val());
         setImageParameters(brightness, contrast, red, green, blue);
     });
+    $("#zoomrange").bind("change", function(e) {
+        zoom = parseInt($(this).val());
+        if (fileName != "") loadPicture();
+    });
     
     showList();
 };
 
 function renderTextBox(e) {
-    /*//Refresh the image.
-    renderImage();
-    //Click coordinates, relative to upper-left corner of the canvas.
-    var clickX = e.layerX;
-    var clickY = e.layerY;
-    while (clickX + 400 >= $("#mainCanvas").attr("clientWidth")) {
-        clickX -= 15;
-    }
-    while (clickY + 80 >= $("#mainCanvas").attr("clientHeight")) {
-        clickY -= 15;
-    }
-    var input = new CanvasInput({
-        canvas: $("#mainCanvas")[0],
-        fontSize: 14,
-        fontFamily: "Arial",
-        width: 350,
-        height: 18,
-        x: clickX,
-        y: clickY,
-        onsubmit: function() {
-            alert(this.value());
-            $("input:text").remove();
-            renderImage();
-        }
-    });
-    input.focus();*/
-    /*setImageParameters(0, 0, 0, 0, 0);
-    if (inputBox == null) {
-        inputBox = new CanvasInput({
-            canvas: $("#mainCanvas")[0],
-            fontSize: 14,
-            fontFamily: "Arial",
-            width: 350,
-            height: 18,
-            x: ($("#mainCanvas").attr("clientWidth") / 2) - 175,
-            y: ($("#mainCanvas").attr("clientHeight") / 2) - 9,
-            onsubmit: function() {
-                alert(this.value());
-                setImageParameters(brightness, contrast, red, green, blue);
-                this._readonly = true;
-                this.blur();
-            }
-        });
-    } else {
-        inputBox._readonly = false;
-        inputBox.focus();
-    }*/
     //Refresh the image.
     renderImage();
     //Click coordinates, relative to upper-left corner of the canvas.
@@ -308,8 +265,8 @@ function loadPicture() {
         setImageParameters(brightness, contrast, red, green, blue);
     });
     //Load the picture.
-    $('#hiddenImage').attr("src", "Default2.aspx?viewPortX=" + $("#mainCanvas")[0].clientWidth +
-        "&viewPortY=" + $("#mainCanvas")[0].clientHeight +
+    $('#hiddenImage').attr("src", "Default2.aspx?viewPortX=" + parseInt($("#mainCanvas")[0].clientWidth) +
+        "&viewPortY=" + parseInt($("#mainCanvas")[0].clientHeight) +
         "&zoomLevel=" + zoom +
         "&fileName=" + fileName);
 }
@@ -358,13 +315,15 @@ function moveVPUp() {
 function zoomIn() {
     if (zoom < 10) {
         zoom++;
-        loadPicture();
+        $("#zoomrange").val(zoom);
+        if (fileName != "") loadPicture();
     }
 }
 
 function zoomOut() {
     if (zoom > 0) {
         zoom--;
-        loadPicture();
+        $("#zoomrange").val(zoom);
+        if (fileName != "") loadPicture();
     }
 }
