@@ -1,0 +1,132 @@
+﻿#topPanel {
+    width: 100%;
+    height: 100px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color:#999999;
+}
+#leftPanel {
+    width: 20%;
+    height: calc(100% - 100px);
+    position: fixed;
+    left: 0;
+    top: 100px;
+}
+#rightPanel {
+    width: 20%;
+    height: calc(100% - 100px);
+    position: fixed;
+    right: 0;
+    top: 100px;
+}
+#mainText {
+    font-family: "Liberation sans", sans-serif;
+    font-size: 50px;
+    color:#2F4F4F;
+    line-height:1.2em;
+    vertical-align: middle;
+}
+#mainLogo {
+    width: 80px;
+    height: 80px;
+    vertical-align: middle;
+}
+.leftSubpanel {
+    width: 80%;
+    margin-left: 10%;
+    text-align: justify;
+    font-size: 0;
+
+}
+#leftRealMoveButtonsSubpanel {
+    height: 33%;
+    position: relative;
+}
+#upMoveButton {
+    top: 0%;
+    bottom: 33%;
+    left: 33%;
+    right: 67%;
+}
+#leftMoveButton {
+    top: 33%;
+    bottom: 67%;
+    left: 0%;
+    right: 33%;
+}
+#rightMoveButton {
+    top: 33%;
+    bottom: 67%;
+    left: 67%;
+    right: 100%;
+}
+#downMoveButton {
+    top: 67%;
+    bottom: 100%;
+    left: 33%;
+    right: 67%;
+}
+.leftButton {
+    color: #000000;
+}
+.leftSmallButton {
+    width: 33%;
+    height: 33%;
+    display: table-cell;
+    position: absolute;
+    margin: 0;
+}
+.rangePic {
+    width: 10%;
+    display: inline-block;
+}
+.range {
+    width: 80%;
+    display: inline-block;
+}
+#centerPanel {
+    width: 60%;
+    height: calc(100% - 100px);
+    position: fixed;
+    left: 20%;
+    top: 100px;
+}
+#hiddenPictures {
+    display: none;
+}
+#mainCanvas {
+    width: 100%;
+    height: 100%;
+    border-bottom:1px solid #d3d3d3;
+    border-top:1px solid #d3d3d3;
+    border-left:1px solid #d3d3d3;
+    border-right:1px solid #d3d3d3;
+}
+#hiddenImageDiv {
+    visibility: hidden;
+}
+a {
+    color: #000000;
+}
+
+#listTitle {
+    font-family: "Liberation sans", sans-serif;
+    font-size: 15px;
+    color:#2F4F4F;
+    line-height:1.2em;
+    padding:10px 20px;
+    vertical-align:left;
+}
+
+#linkList {
+  
+    display:block;
+	padding:10px 20px;
+	font-size:12px;
+	line-height:16px;
+	font-weight:normal;
+	color:#747474;
+	text-decoration:none;
+	text-align:left;
+}
